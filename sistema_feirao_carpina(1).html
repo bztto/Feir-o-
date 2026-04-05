@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feirão Seminovos em Alta · Carpina — Gestão</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #C0392B;
+  --red-dark: #922B21;
+  --red-light: #FDECEA;
+  --gold: #E8B84B;
+  --gold-light: #FEF9E7;
+  --green: #27AE60;
+  --green-light: #EAF7EF;
+  --dark: #111111;
+  --dark2: #1E1E1E;
+  --dark3: #2A2A2A;
+  --gray1: #F5F5F5;
+  --gray2: #E8E8E8;
+  --gray3: #AAAAAA;
+  --gray4: #666666;
+  --white: #FFFFFF;
+  --blue: #1A6EA8;
+  --blue-light: #EAF2FB;
+  --purple: #6C3483;
+  --purple-light: #F3EEFB;
+  --text: #111111;
+  --text2: #555555;
+  --text3: #999999;
+  --bg: #FFFFFF;
+  --bg2: #F8F8F8;
+  --bg3: #F0F0F0;
+  --border: #E0E0E0;
+  --border2: #CCCCCC;
+  --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; font-size: 14px; color: var(--text); background: var(--gray1); min-height: 100vh; }
+
+/* ── HEADER ─────────────────────────────────── */
+.site-header {
+  background: var(--dark);
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 16px;
+  height: 56px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.brand { display: flex; align-items: center; gap: 10px; flex: none; }
+.brand-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 900; color: var(--white); letter-spacing: 1px; line-height: 1; }
+.brand-logo span { color: var(--red); }
+.brand-sep { width: 1px; height: 20px; background: #333; }
+.brand-event { font-size: 12px; color: var(--gray3); font-weight: 500; }
+.header-nav { display: flex; gap: 2px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.header-nav::-webkit-scrollbar { display: none; }
+.hn { padding: 0 14px; height: 56px; font-size: 13px; font-weight: 600; color: var(--gray3); background: none; border: none; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.15s; letter-spacing: 0.3px; }
+.hn:hover { color: var(--white); }
+.hn.active { color: var(--white); border-bottom-color: var(--red); }
+.header-right { display: flex; align-items: center; gap: 10px; flex: none; }
+.countdown-badge { background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+
+/* ── LAYOUT ─────────────────────────────────── */
+.main { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── PAGE TITLE ─────────────────────────────── */
+.page-title { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 900; color: var(--dark); letter-spacing: 0.5px; margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+/* ── CARDS ──────────────────────────────────── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--white); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.stat-card.highlight { background: var(--dark); border-color: var(--dark); }
+.stat-val { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 900; line-height: 1; color: var(--text); }
+.stat-card.highlight .stat-val { color: var(--red); }
+.stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; font-weight: 500; }
+.stat-card.highlight .stat-label { color: var(--gray3); }
+.stat-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.stat-card.highlight .stat-sub { color: #555; }
+
+/* ── SECTION HEADER ─────────────────────────── */
+.section-hdr { display: flex; align-items: center; gap: 10px; margin: 20px 0 12px; }
+.section-hdr-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--dark); letter-spacing: 0.3px; text-transform: uppercase; }
+.section-hdr-line { flex: 1; height: 1px; background: var(--border); }
+.section-hdr-count { font-size: 11px; color: var(--text3); background: var(--bg3); padding: 2px 8px; border-radius: 10px; }
+
+/* ── PROGRESS ───────────────────────────────── */
+.progress-block { background: var(--white); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; }
+.prog-row { display: grid; grid-template-columns: 180px 1fr 40px; gap: 12px; align-items: center; margin-bottom: 10px; }
+.prog-row:last-child { margin-bottom: 0; }
+.prog-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.prog-bar { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.prog-pct { font-size: 12px; font-weight: 700; color: var(--text2); text-align: right; }
+
+/* ── TASKS ──────────────────────────────────── */
+.task-group { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden; }
+.task-group-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; user-select: none; background: var(--bg2); border-bottom: 1px solid var(--border); }
+.task-group-header:hover { background: var(--bg3); }
+.tgh-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.tgh-title { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); flex: 1; letter-spacing: 0.3px; }
+.tgh-count { font-size: 11px; color: var(--text3); background: var(--white); border: 1px solid var(--border); padding: 2px 8px; border-radius: 10px; }
+.tgh-chev { font-size: 11px; color: var(--text3); transition: transform 0.2s; }
+.tgh-chev.open { transform: rotate(90deg); }
+.task-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
+.task-item:last-child { border-bottom: none; }
+.task-item:hover { background: var(--bg2); }
+.task-item.done { opacity: 0.5; }
+.task-chk { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border2); display: flex; align-items: center; justify-content: center; flex: none; margin-top: 1px; transition: all 0.15s; background: var(--white); }
+.task-chk.done { background: var(--green); border-color: var(--green); }
+.task-chk.done::after { content: ''; display: block; width: 10px; height: 6px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(-45deg) translate(1px,-1px); }
+.task-body { flex: 1; min-width: 0; }
+.task-name { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
+.task-item.done .task-name { text-decoration: line-through; color: var(--text3); }
+.task-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+.tag-red { background: var(--red-light); color: var(--red); }
+.tag-gold { background: var(--gold-light); color: #856404; }
+.tag-green { background: var(--green-light); color: #1a5c36; }
+.tag-blue { background: var(--blue-light); color: var(--blue); }
+.tag-purple { background: var(--purple-light); color: var(--purple); }
+.tag-gray { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.task-date { font-size: 11px; color: var(--text3); }
+.task-date.urgent { color: var(--red); font-weight: 700; }
+
+/* ── FILTER BAR ─────────────────────────────── */
+.filter-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.fb-label { font-size: 12px; color: var(--text2); font-weight: 600; }
+.filt { font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--text2); transition: all 0.15s; }
+.filt:hover { border-color: var(--border2); color: var(--text); }
+.filt.active { background: var(--red); color: var(--white); border-color: var(--red); }
+.filt-sep { width: 1px; height: 20px; background: var(--border); }
+
+/* ── CALENDAR ───────────────────────────────── */
+.cal-container { display: flex; flex-direction: column; gap: 6px; }
+.cal-row { display: grid; grid-template-columns: 90px 1fr; gap: 12px; }
+.cal-date-col { display: flex; flex-direction: column; align-items: flex-end; padding-top: 8px; }
+.cal-day { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; line-height: 1; }
+.cal-month { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
+.cal-dot-line { width: 1px; background: var(--border); flex: 1; margin-top: 6px; margin-right: 5px; min-height: 20px; }
+.cal-items-col { display: flex; flex-direction: column; gap: 4px; padding-bottom: 8px; }
+.cal-item { font-size: 12px; padding: 6px 12px; border-radius: var(--radius); display: flex; align-items: center; gap: 8px; border-left: 3px solid transparent; }
+.cal-item-dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.cal-item-text { flex: 1; color: var(--text); }
+.cal-item-tag { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; flex: none; }
+.cal-past { opacity: 0.45; }
+.cal-past .cal-item-text { text-decoration: line-through; color: var(--text3); }
+
+/* ── LOJISTAS ───────────────────────────────── */
+.loj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.loj-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; cursor: pointer; transition: all 0.15s; }
+.loj-card:hover { box-shadow: var(--shadow-md); border-color: var(--border2); }
+.loj-card.complete { border-color: var(--green); }
+.loj-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.loj-num { width: 32px; height: 32px; border-radius: 50%; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; }
+.loj-name { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; }
+.loj-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.loj-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 5px; }
+.loj-key { font-size: 11px; color: var(--text3); font-weight: 600; min-width: 80px; flex: none; padding-top: 1px; }
+.loj-val { font-size: 12px; color: var(--text); flex: 1; }
+.loj-score { display: flex; gap: 3px; margin: 8px 0; }
+.loj-star { font-size: 16px; color: var(--border2); }
+.loj-star.on { color: var(--gold); }
+.loj-checks { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.loj-chk { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 10px; }
+.loj-chk.ok { background: var(--green-light); color: #1a5c36; }
+.loj-chk.pend { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+
+/* ── MODAL ──────────────────────────────────── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+.modal { background: var(--white); border-radius: var(--radius-xl); padding: 24px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-md); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.modal-close { background: var(--bg3); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; color: var(--text2); display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { background: var(--border); }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
+.form-input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--text); background: var(--white); font-family: 'Barlow', sans-serif; transition: border-color 0.15s; }
+.form-input:focus { outline: none; border-color: var(--red); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+textarea.form-input { resize: vertical; min-height: 70px; }
+.form-checks { display: flex; gap: 16px; flex-wrap: wrap; }
+.form-check { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.form-check input { width: 16px; height: 16px; accent-color: var(--red); cursor: pointer; }
+.modal-footer { display: flex; gap: 8px; margin-top: 20px; }
+.btn-primary { background: var(--red); color: white; border: none; padding: 10px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Barlow', sans-serif; }
+.btn-primary:hover { background: var(--red-dark); }
+.btn-secondary { background: var(--white); color: var(--text); border: 1.5px solid var(--border); padding: 10px 16px; border-radius: var(--radius); font-size: 13px; cursor: pointer; font-family: 'Barlow', sans-serif; }
+.btn-secondary:hover { background: var(--bg2); }
+
+/* ── DOCS ───────────────────────────────────── */
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.doc-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow); }
+.doc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+.doc-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+.doc-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+.doc-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+
+/* ── TOP BAR URGENTES ───────────────────────── */
+.urgentes-block { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 20px; }
+
+/* ── BTN ────────────────────────────────────── */
+.btn-add { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Barlow', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
+.btn-add:hover { background: var(--red-dark); }
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media(max-width: 640px) {
+  .site-header { padding: 0 12px; height: 50px; }
+  .hn { padding: 0 10px; font-size: 12px; }
+  .brand-event { display: none; }
+  .main { padding: 14px 10px; }
+  .prog-row { grid-template-columns: 120px 1fr 36px; }
+  .cal-row { grid-template-columns: 64px 1fr; }
+  .doc-grid { grid-template-columns: 1fr; }
+  .loj-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-logo">FEIRÃO<span>.</span></div>
+    <div class="brand-sep"></div>
+    <div class="brand-event">Seminovos em Alta · Carpina</div>
+  </div>
+  <nav class="header-nav">
+    <button class="hn active" onclick="showPanel('dashboard',this)">Dashboard</button>
+    <button class="hn" onclick="showPanel('tarefas',this)">Tarefas</button>
+    <button class="hn" onclick="showPanel('calendario',this)">Calendário</button>
+    <button class="hn" onclick="showPanel('lojistas',this)">Lojistas</button>
+    <button class="hn" onclick="showPanel('docs',this)">Documentos</button>
+  </nav>
+  <div class="header-right">
+    <div class="countdown-badge" id="countdown-badge">⏱ ...</div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="page-title">Dashboard</div>
+    <div class="page-sub">Visão geral da campanha — atualizado em tempo real</div>
+    <div class="card-grid" id="dash-cards"></div>
+    <div class="section-hdr"><div class="section-hdr-title">Progresso das fases</div><div class="section-hdr-line"></div></div>
+    <div class="progress-block" id="dash-progress"></div>
+    <div class="section-hdr"><div class="section-hdr-title">Ações urgentes em aberto</div><div class="section-hdr-line"></div></div>
+    <div class="urgentes-block" id="dash-urgentes"></div>
+  </div>
+
+  <!-- TAREFAS -->
+  <div class="panel" id="panel-tarefas">
+    <div class="page-title">Tarefas</div>
+    <div class="page-sub">Todos os entregáveis organizados por fase e responsável</div>
+    <div class="filter-bar">
+      <span class="fb-label">Ver:</span>
+      <div class="filt active" onclick="filterTasks('todos',this)">Todos</div>
+      <div class="filt" onclick="filterTasks('pendente',this)">Pendentes</div>
+      <div class="filt" onclick="filterTasks('concluido',this)">Concluídos</div>
+      <div class="filt-sep"></div>
+      <div class="filt" onclick="filterTasks('design',this)">Designer</div>
+      <div class="filt" onclick="filterTasks('social',this)">Social Media</div>
+      <div class="filt" onclick="filterTasks('coord',this)">Coordenação</div>
+      <div class="filt" onclick="filterTasks('video',this)">Videomaker</div>
+    </div>
+    <div id="task-container"></div>
+  </div>
+
+  <!-- CALENDÁRIO -->
+  <div class="panel" id="panel-calendario">
+    <div class="page-title">Calendário Editorial</div>
+    <div class="page-sub">Todas as publicações e ações de 04 de abril a 27 de abril</div>
+    <div class="filter-bar">
+      <span class="fb-label">Fase:</span>
+      <div class="filt active" onclick="filterCal('todas',this)">Todas</div>
+      <div class="filt" onclick="filterCal('fase1',this)">Fase 1 · Teaser</div>
+      <div class="filt" onclick="filterCal('fase2',this)">Fase 2 · Ativação</div>
+      <div class="filt" onclick="filterCal('fase3',this)">Fase 3 · Evento</div>
+    </div>
+    <div class="cal-container" id="cal-container"></div>
+  </div>
+
+  <!-- LOJISTAS -->
+  <div class="panel" id="panel-lojistas">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="page-title">Lojistas</div>
+        <div class="page-sub" id="loj-subtitle">Gerencie os 16 participantes do feirão</div>
+      </div>
+      <button class="btn-add" onclick="openModal(null)">+ Adicionar lojista</button>
+    </div>
+    <div class="loj-grid" id="loj-grid"></div>
+  </div>
+
+  <!-- DOCS -->
+  <div class="panel" id="panel-docs">
+    <div class="page-title">Documentos da Campanha</div>
+    <div class="page-sub">Todos os materiais produzidos para o feirão</div>
+    <div class="doc-grid" id="doc-grid"></div>
+  </div>
+
+</main>
+
+<!-- MODAL LOJISTA -->
+<div class="modal-overlay" id="modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────
+const PHASES = [
+  {
+    id:'f1', title:'Fase 1 — Teaser · 04 a 13 de abril', color:'#C0392B', fase:'fase1',
+    items:[
+      {id:'t1',name:'Enviar kit "Salve a data" para os 16 lojistas (WhatsApp)',resp:'coord',date:'05/04',urgent:true},
+      {id:'t2',name:'Publicar Story 1 S1 — Gancho "Carpina. 23/04. Você vai entender."',resp:'social',date:'04/04',urgent:true},
+      {id:'t3',name:'Ativar campanha Meta Ads teaser — segmentação raio 60km',resp:'social',date:'04/04',urgent:true},
+      {id:'t4',name:'Contagem regressiva diária às 8h (D-19 a D-10)',resp:'social',date:'04–13/04'},
+      {id:'t5',name:'Arte Stories S1 — 4 peças (gancho · pista · calendário · revelação)',resp:'design',date:'04/04',urgent:true},
+      {id:'t6',name:'Thumbnails R1 e R2 — capas de feed 1:1',resp:'design',date:'04/04',urgent:true},
+      {id:'t7',name:'10 variações de contagem regressiva D-19 a D-10',resp:'design',date:'04/04',urgent:true},
+      {id:'t8',name:'Card "Salve a data" Stories 9:16 + Feed 1:1',resp:'design',date:'04/04',urgent:true},
+      {id:'t9',name:'Gravação e edição Reels R1 — "Algo está chegando" 15s',resp:'video',date:'04/04',urgent:true},
+      {id:'t10',name:'Publicar Reels R1 ao ar',resp:'social',date:'04/04',urgent:true},
+      {id:'t11',name:'Gravação e edição Reels R2 — "500 carros" 20s',resp:'video',date:'08/04'},
+      {id:'t12',name:'Publicar Story 2 S1 — Pista + enquete',resp:'social',date:'07/04'},
+      {id:'t13',name:'Publicar Story 3 S1 — Calendário + sticker contagem',resp:'social',date:'10/04'},
+      {id:'t14',name:'Publicar Story 4 S1 — Revelação da logo (salvar como Destaque)',resp:'social',date:'12/04'},
+      {id:'t15',name:'Visita presencial a Carpina — ficha de coleta dos lojistas',resp:'coord',date:'05/04',urgent:true},
+      {id:'t16',name:'Assinar contrato com Shopping Carpina',resp:'coord',date:'07/04',urgent:true},
+    ]
+  },
+  {
+    id:'f2', title:'Fase 2 — Ativação · 14 a 22 de abril', color:'#E8B84B', fase:'fase2',
+    items:[
+      {id:'t20',name:'Publicar carrossel feed — 5 slides revelação completa',resp:'social',date:'14/04',urgent:true},
+      {id:'t21',name:'Ativar Meta Ads full — campanha de leads',resp:'social',date:'14/04',urgent:true},
+      {id:'t22',name:'Enviar kit de artes para os 16 lojistas via WhatsApp',resp:'coord',date:'14/04',urgent:true},
+      {id:'t23',name:'Gravação e edição Reels R3 — Revelação 30s',resp:'video',date:'14/04',urgent:true},
+      {id:'t24',name:'Publicar Reels R4 — Bradesco 30s',resp:'video',date:'15/04'},
+      {id:'t25',name:'Stories S2 — enquete + caixa de perguntas + DMs',resp:'social',date:'15–17/04'},
+      {id:'t26',name:'Publicar card Bradesco standalone',resp:'social',date:'16/04'},
+      {id:'t27',name:'Rádio local — iniciar spots 3x/dia',resp:'coord',date:'17/04'},
+      {id:'t28',name:'Série lojistas R5 — gravar e publicar 1 por dia',resp:'video',date:'16–22/04'},
+      {id:'t29',name:'R6 Versão 1 — "Faltam 7 dias"',resp:'video',date:'16/04'},
+      {id:'t30',name:'R6 Versão 2 — "Faltam 3 dias"',resp:'video',date:'19/04'},
+      {id:'t31',name:'R6 Versão 3 — "Amanhã começa"',resp:'video',date:'22/04'},
+      {id:'t32',name:'Stories S3 — Como chegar e horários (4 artes)',resp:'social',date:'21/04'},
+      {id:'t33',name:'Confirmar alinhamento Bradesco — mesa e equipe',resp:'coord',date:'18/04'},
+      {id:'t34',name:'Contagem regressiva diária às 8h (D-9 a D-1)',resp:'social',date:'14–22/04'},
+      {id:'t35',name:'Instalar outdoor e faixas em Carpina',resp:'coord',date:'14/04'},
+      {id:'t36',name:'Ativar influenciadores locais',resp:'coord',date:'14/04'},
+      {id:'t37',name:'Confirmar fornecedores: tendas, geradores, segurança',resp:'coord',date:'11/04',urgent:true},
+      {id:'t38',name:'Anunciar live L1 nos Stories — 22/04 às 20h',resp:'social',date:'22/04'},
+    ]
+  },
+  {
+    id:'f3', title:'Fase 3 — Evento ao vivo · 23 a 26 de abril', color:'#27AE60', fase:'fase3',
+    items:[
+      {id:'t40',name:'Checklist técnico pré-live (Wi-Fi · bateria · lapela)',resp:'social',date:'23/04 · 9h'},
+      {id:'t41',name:'Gravação Reels R7 — panorama abertura',resp:'video',date:'23/04 · 8h',urgent:true},
+      {id:'t42',name:'Live L1 — abertura do feirão ao vivo',resp:'social',date:'23/04 · 10h',urgent:true},
+      {id:'t43',name:'Story S4 diário — 6 Stories por dia (9h · 10h30 · 12h · 14h · 16h · noite)',resp:'social',date:'23–26/04'},
+      {id:'t44',name:'Gravação R8 — depoimento de comprador (1 por dia)',resp:'video',date:'23–25/04'},
+      {id:'t45',name:'Repost UGC — compradores com chave e fila Bradesco',resp:'social',date:'23–26/04'},
+      {id:'t46',name:'Placar de vendas ao vivo — atualizar contagem diária',resp:'coord',date:'23–26/04'},
+      {id:'t47',name:'Entrega de chaves no microfone (3 camadas)',resp:'coord',date:'23–26/04'},
+      {id:'t48',name:'Gravação Reels R9 — "Último dia"',resp:'video',date:'26/04 · 13h',urgent:true},
+      {id:'t49',name:'Publicar Reels R9 — EXATAMENTE às 14h',resp:'social',date:'26/04 · 14h',urgent:true},
+      {id:'t50',name:'Compilar resultados: vendas · leads · contratos Bradesco',resp:'coord',date:'26/04'},
+      {id:'t51',name:'Post de encerramento',resp:'social',date:'26/04 · noite'},
+      {id:'t52',name:'Post de resultados D+1',resp:'social',date:'27/04'},
+      {id:'t53',name:'Mensagem de reativação para leads que não compraram',resp:'social',date:'27/04'},
+    ]
+  }
+];
+
+const CAL_DATA = [
+  {date:'04/04',day:'04',fase:'fase1',items:['Story 1 S1 ao ar — "Carpina. 23/04."','Reels R1 publicado','Contagem D-19 às 8h','Meta Ads teaser ativo']},
+  {date:'05/04',day:'05',fase:'fase1',items:['Visita presencial Carpina — ficha de coleta','Contagem D-18','Kit lojistas WhatsApp enviado']},
+  {date:'07/04',day:'07',fase:'fase1',items:['Contagem D-16','Contrato Shopping Carpina assinado']},
+  {date:'08/04',day:'08',fase:'fase1',items:['Reels R2 ao ar — "500 carros"','Contagem D-15']},
+  {date:'10/04',day:'10',fase:'fase1',items:['Story 3 S1 — calendário + sticker contagem','Contagem D-13']},
+  {date:'12/04',day:'12',fase:'fase1',items:['Story 4 S1 — revelação logo (salvar Destaque)','Contagem D-11']},
+  {date:'14/04',day:'14',fase:'fase2',items:['INÍCIO DA FASE 2 — ATIVAÇÃO','Carrossel feed — revelação completa','Reels R3 ao ar','Meta Ads full ativo','Contagem D-9']},
+  {date:'15/04',day:'15',fase:'fase2',items:['Reels R4 — Bradesco','Stories S2 — enquete','Contagem D-8']},
+  {date:'16/04',day:'16',fase:'fase2',items:['Card Bradesco standalone','Lojistas R5 Dia 1','R6 V1 — Faltam 7 dias','Contagem D-7']},
+  {date:'17/04',day:'17',fase:'fase2',items:['Rádio local inicia 3x/dia','Lojistas R5 Dia 2','Contagem D-6']},
+  {date:'18/04',day:'18',fase:'fase2',items:['Lojistas R5 Dia 3','Alinhamento Bradesco confirmado','Contagem D-5']},
+  {date:'19/04',day:'19',fase:'fase2',items:['Lojistas R5 Dia 4','R6 V2 — Faltam 3 dias','Contagem D-4']},
+  {date:'20/04',day:'20',fase:'fase2',items:['Lojistas R5 Dia 5','Contagem D-3']},
+  {date:'21/04',day:'21',fase:'fase2',items:['Stories S3 — como chegar e horários','Lojistas R5 Dia 6','Contagem D-2']},
+  {date:'22/04',day:'22',fase:'fase2',items:['R6 V3 — Amanhã começa','Lojistas R5 Dia 7','Contagem D-1','Anunciar live L1 às 20h']},
+  {date:'23/04',day:'23',fase:'fase3',items:['ABERTURA — Shopping Carpina 9h','Reels R7 — panorama do evento','Live L1 às 10h','S4 diário — 6 Stories','R8 depoimento comprador']},
+  {date:'24/04',day:'24',fase:'fase3',items:['S4 diário — 6 Stories','R8 depoimento Dia 2','Placar de vendas atualizado']},
+  {date:'25/04',day:'25',fase:'fase3',items:['S4 diário — 6 Stories','R8 depoimento Dia 3','Sábado — maior fluxo esperado']},
+  {date:'26/04',day:'26',fase:'fase3',items:['ÚLTIMO DIA — encerra 18h','R9 ao ar EXATAMENTE às 14h','S4 urgência máxima','Post encerramento noite']},
+  {date:'27/04',day:'27',fase:'fase3',items:['Post resultados D+1','Mensagem reativação leads']},
+];
+
+const DOCS_DATA = [
+  {icon:'📋',title:'Copy Master v2',desc:'Reels R1–R6, rádio, live L1, pós-evento. Manifesto da campanha e frases-âncora.',tags:['Copy','Essencial'],color:'#C0392B'},
+  {icon:'📱',title:'Copy Stories S1–S4 + UGC',desc:'Textos definitivos de todos os Stories. Tom, texto em tela, captions, DMs e UGC.',tags:['Copy','Stories'],color:'#C0392B'},
+  {icon:'✏️',title:'Adendo de copy',desc:'25 atualizações de falas e captions aprovadas. Ler junto com o Copy Master.',tags:['Copy','Revisado'],color:'#e8b84b'},
+  {icon:'🎬',title:'Roteiros Reels e Stories',desc:'Estrutura, câmera e edição de todos os vídeos. Storyboards frame a frame.',tags:['Produção','Vídeo'],color:'#6c3483'},
+  {icon:'🎨',title:'Briefing criativo',desc:'Para o Diretor de Arte. Paleta, tipografia, formatos prioritários e mapa de arquivos.',tags:['Design','Arte'],color:'#1a6ea8'},
+  {icon:'🤝',title:'Manual do lojista',desc:'Tudo que os 16 lojistas precisam saber. Regras, credenciamento e processo.',tags:['Lojistas'],color:'#27ae60'},
+  {icon:'📣',title:'Briefing influenciadores',desc:'Perfil, cronograma de publicações, regras e remuneração.',tags:['Influência'],color:'#856404'},
+  {icon:'📻',title:'Spots de rádio',desc:'3 versões de 30s com roteiro completo e instruções de produção.',tags:['Mídia','Rádio'],color:'#444444'},
+  {icon:'📊',title:'Plano de mídia',desc:'6 canais, alocação de verba, estrutura Meta Ads e KPIs da campanha.',tags:['Mídia','Estratégia'],color:'#C0392B'},
+  {icon:'📁',title:'Ficha de coleta Carpina',desc:'Para a visita presencial. Score de lojistas, material por loja e fotos da cidade.',tags:['Operação'],color:'#27ae60'},
+];
+
+// ── STATE ───────────────────────────────────────────────────────────────
+let checks = JSON.parse(localStorage.getItem('feirao-checks') || '{}');
+let lojistas = JSON.parse(localStorage.getItem('feirao-lojistas') || JSON.stringify(
+  Array.from({length:16},(_,i)=>({id:i+1,nome:'',resp:'',whats:'',carros:0,categorias:'',score:0,contrato:false,briefing:false,logo:false,video:false,obs:''}))
+));
+let taskFilter = 'todos';
+let calFilter = 'todas';
+
+function saveChecks(){ localStorage.setItem('feirao-checks', JSON.stringify(checks)); }
+function saveLojistas(){ localStorage.setItem('feirao-lojistas', JSON.stringify(lojistas)); }
+
+// ── NAV ─────────────────────────────────────────────────────────────────
+function showPanel(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.hn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const renders = {dashboard:renderDashboard,tarefas:renderTasks,calendario:renderCal,lojistas:renderLojistas,docs:renderDocs};
+  if(renders[id]) renders[id]();
+}
+
+// ── COUNTDOWN ───────────────────────────────────────────────────────────
+function updateCountdown(){
+  const event = new Date('2026-04-23T09:00:00');
+  const now = new Date();
+  const diff = event - now;
+  const el = document.getElementById('countdown-badge');
+  if(diff <= 0){ el.textContent = '🔴 AO VIVO'; el.style.background = '#C0392B'; return; }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  el.textContent = d > 0 ? `⏱ ${d} dias para o evento` : `⏱ ${h}h para abertura`;
+}
+
+// ── DASHBOARD ───────────────────────────────────────────────────────────
+function renderDashboard(){
+  const allTasks = PHASES.flatMap(p=>p.items);
+  const done = allTasks.filter(t=>checks[t.id]).length;
+  const total = allTasks.length;
+  const lojDone = lojistas.filter(l=>l.nome&&l.contrato).length;
+  const totalCarros = lojistas.reduce((a,l)=>a+(parseInt(l.carros)||0),0);
+  const event = new Date('2026-04-23');
+  const daysLeft = Math.max(0, Math.ceil((event-new Date())/86400000));
+
+  document.getElementById('dash-cards').innerHTML = `
+    <div class="stat-card highlight">
+      <div class="stat-val">${daysLeft}</div>
+      <div class="stat-label">dias para o evento</div>
+      <div class="stat-sub">23 de abril de 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${done}/${total}</div>
+      <div class="stat-label">tarefas concluídas</div>
+      <div class="stat-sub">${Math.round(done/total*100)}% do total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${lojDone}/16</div>
+      <div class="stat-label">lojistas confirmados</div>
+      <div class="stat-sub">contrato assinado</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${totalCarros||'—'}</div>
+      <div class="stat-label">carros confirmados</div>
+      <div class="stat-sub">meta: 500+</div>
+    </div>
+  `;
+
+  document.getElementById('dash-progress').innerHTML = PHASES.map(p=>{
+    const d = p.items.filter(t=>checks[t.id]).length;
+    const t = p.items.length;
+    const pct = Math.round(d/t*100);
+    return `<div class="prog-row">
+      <div class="prog-label">${p.title.split('—')[0].trim()}</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${p.color}"></div></div>
+      <div class="prog-pct" style="color:${p.color}">${pct}%</div>
+    </div>`;
+  }).join('');
+
+  const urgentes = PHASES.flatMap(p=>p.items).filter(t=>t.urgent&&!checks[t.id]).slice(0,6);
+  document.getElementById('dash-urgentes').innerHTML = urgentes.length
+    ? urgentes.map(t=>taskHTML(t)).join('')
+    : '<div style="padding:16px;font-size:13px;color:var(--text3);text-align:center">✅ Todas as ações urgentes concluídas!</div>';
+}
+
+// ── TASKS ───────────────────────────────────────────────────────────────
+const respColors = {design:'tag-purple',social:'tag-blue',coord:'tag-green',video:'tag-gold'};
+const respLabels = {design:'Designer',social:'Social Media',coord:'Coordenação',video:'Videomaker'};
+
+function taskHTML(t){
+  const done = checks[t.id];
+  const isUrgent = t.urgent && !done;
+  return `<div class="task-item ${done?'done':''}" onclick="toggleTask('${t.id}')">
+    <div class="task-chk ${done?'done':''}"></div>
+    <div class="task-body">
+      <div class="task-name ${done?'done':''}">${t.name}</div>
+      <div class="task-meta">
+        <span class="tag ${respColors[t.resp]||'tag-gray'}">${respLabels[t.resp]||t.resp}</span>
+        <span class="task-date ${isUrgent?'urgent':''}">${isUrgent?'⚡ ':''}${t.date}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+let openGroups = {};
+function renderTasks(){
+  const container = document.getElementById('task-container');
+  container.innerHTML = '';
+  PHASES.forEach(p=>{
+    const items = p.items.filter(t=>{
+      if(taskFilter==='todos') return true;
+      if(taskFilter==='pendente') return !checks[t.id];
+      if(taskFilter==='concluido') return checks[t.id];
+      return t.resp===taskFilter;
+    });
+    if(!items.length) return;
+    const done = items.filter(t=>checks[t.id]).length;
+    const open = openGroups[p.id] !== false;
+    const div = document.createElement('div');
+    div.className = 'task-group';
+    div.innerHTML = `
+      <div class="task-group-header" onclick="toggleGroup('${p.id}')">
+        <div class="tgh-dot" style="background:${p.color}"></div>
+        <div class="tgh-title">${p.title}</div>
+        <div class="tgh-count">${done}/${items.length}</div>
+        <div class="tgh-chev ${open?'open':''}">▶</div>
+      </div>
+      ${open ? `<div class="task-group-body">${items.map(taskHTML).join('')}</div>` : ''}
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggleGroup(id){
+  openGroups[id] = openGroups[id] === false ? true : false;
+  renderTasks();
+}
+
+function filterTasks(f, el){
+  taskFilter = f;
+  document.querySelectorAll('#panel-tarefas .filt').forEach(e=>e.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderTasks();
+}
+
+function toggleTask(id){
+  checks[id] = !checks[id];
+  saveChecks();
+  const active = document.querySelector('.panel.active').id.replace('panel-','');
+  if(active==='dashboard') renderDashboard();
+  if(active==='tarefas') renderTasks();
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────────────────
+const phaseColors = {fase1:'#C0392B',fase2:'#E8B84B',fase3:'#27AE60'};
+const phaseLabels = {fase1:'Teaser',fase2:'Ativação',fase3:'Evento'};
+
+function renderCal(){
+  const items = CAL_DATA.filter(c=>calFilter==='todas'||c.fase===calFilter);
+  const today = new Date(); today.setHours(0,0,0,0);
+  document.getElementById('cal-container').innerHTML = items.map(c=>{
+    const [d,m] = c.date.split('/').map(Number);
+    const dt = new Date(2026,m-1,d); dt.setHours(0,0,0,0);
+    const past = dt < today;
+    const col = phaseColors[c.fase];
+    return `<div class="cal-row">
+      <div class="cal-date-col">
+        <div class="cal-day" style="color:${past?'var(--text3)':col}">${c.day}</div>
+        <div class="cal-month" style="color:${past?'var(--text3)':col}">Abr${past?' ✓':''}</div>
+        <div class="cal-dot-line" style="background:${past?'var(--border)':col+'44'}"></div>
+      </div>
+      <div class="cal-items-col">
+        ${c.items.map(item=>`<div class="cal-item ${past?'cal-past':''}" style="background:${col}12;border-left-color:${col}">
+          <div class="cal-item-dot" style="background:${col}"></div>
+          <span class="cal-item-text">${item}</span>
+          <span class="cal-item-tag" style="background:${col}20;color:${col}">${phaseLabels[c.fase]}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCal(f, el){
+  calFilter = f;
+  document.querySelectorAll('#panel-calendario .filt').forEach(e=>e.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderCal();
+}
+
+// ── LOJISTAS ─────────────────────────────────────────────────────────────
+function renderLojistas(){
+  const completos = lojistas.filter(l=>l.nome&&l.contrato&&l.logo).length;
+  document.getElementById('loj-subtitle').textContent = `${completos} de 16 lojistas com dados completos · ${lojistas.reduce((a,l)=>a+(parseInt(l.carros)||0),0)} carros confirmados`;
+  document.getElementById('loj-grid').innerHTML = lojistas.map(l=>`
+    <div class="loj-card ${l.nome&&l.contrato&&l.logo?'complete':''}" onclick="openModal(${l.id})">
+      <div class="loj-header">
+        <div class="loj-num">${String(l.id).padStart(2,'0')}</div>
+        <div class="loj-name">${l.nome||'Lojista '+l.id}</div>
+        <span class="loj-status tag ${l.nome?'tag-green':'tag-gray'}">${l.nome?'Ativo':'Pendente'}</span>
+      </div>
+      ${l.resp?`<div class="loj-row"><span class="loj-key">Responsável</span><span class="loj-val">${l.resp}</span></div>`:''}
+      ${l.whats?`<div class="loj-row"><span class="loj-key">WhatsApp</span><span class="loj-val">${l.whats}</span></div>`:''}
+      ${l.carros?`<div class="loj-row"><span class="loj-key">Carros</span><span class="loj-val">${l.carros} veículos · ${l.categorias||'—'}</span></div>`:''}
+      <div class="loj-score">${[1,2,3,4,5].map(s=>`<span class="loj-star ${l.score>=s?'on':''}">★</span>`).join('')}</div>
+      <div class="loj-checks">
+        <span class="loj-chk ${l.contrato?'ok':'pend'}">${l.contrato?'✓ ':''} Contrato</span>
+        <span class="loj-chk ${l.briefing?'ok':'pend'}">${l.briefing?'✓ ':''} Briefing</span>
+        <span class="loj-chk ${l.logo?'ok':'pend'}">${l.logo?'✓ ':''} Logo</span>
+        <span class="loj-chk ${l.video?'ok':'pend'}">${l.video?'✓ ':''} Vídeo</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(id){
+  const l = id ? lojistas.find(x=>x.id===id) : null;
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">${l&&l.nome?l.nome:'Lojista '+(id||'novo')}</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Nome da loja</label><input class="form-input" id="f-nome" value="${l?l.nome:''}" placeholder="Nome da loja"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Responsável</label><input class="form-input" id="f-resp" value="${l?l.resp:''}" placeholder="Nome"></div>
+      <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="f-whats" value="${l?l.whats:''}" placeholder="(81) 9xxxx-xxxx"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nº de carros no feirão</label><input class="form-input" id="f-carros" type="number" value="${l?l.carros:0}" min="0"></div>
+      <div class="form-group"><label class="form-label">Score (1–5)</label><input class="form-input" id="f-score" type="number" value="${l?l.score:0}" min="0" max="5"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Categorias de veículos</label><input class="form-input" id="f-cat" value="${l?l.categorias:''}" placeholder="hatch, SUV, sedan, pickup..."></div>
+    <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="f-obs">${l?l.obs:''}</textarea></div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <div class="form-checks">
+        <label class="form-check"><input type="checkbox" id="f-contrato" ${l&&l.contrato?'checked':''}> Contrato assinado</label>
+        <label class="form-check"><input type="checkbox" id="f-briefing" ${l&&l.briefing?'checked':''}> Briefing enviado</label>
+        <label class="form-check"><input type="checkbox" id="f-logo" ${l&&l.logo?'checked':''}> Logo recebido</label>
+        <label class="form-check"><input type="checkbox" id="f-video" ${l&&l.video?'checked':''}> Vídeo coletado</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="saveLojista(${id||'null'})">Salvar</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    </div>
+  `;
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function saveLojista(id){
+  const idx = id ? lojistas.findIndex(l=>l.id===id) : -1;
+  const data = {
+    id: id||Date.now(),
+    nome: document.getElementById('f-nome').value.trim(),
+    resp: document.getElementById('f-resp').value.trim(),
+    whats: document.getElementById('f-whats').value.trim(),
+    carros: parseInt(document.getElementById('f-carros').value)||0,
+    score: Math.min(5,Math.max(0,parseInt(document.getElementById('f-score').value)||0)),
+    categorias: document.getElementById('f-cat').value.trim(),
+    obs: document.getElementById('f-obs').value.trim(),
+    contrato: document.getElementById('f-contrato').checked,
+    briefing: document.getElementById('f-briefing').checked,
+    logo: document.getElementById('f-logo').checked,
+    video: document.getElementById('f-video').checked,
+  };
+  if(idx>=0) lojistas[idx]=data; else lojistas.push(data);
+  saveLojistas();
+  closeModal();
+  renderLojistas();
+}
+
+function closeModal(){
+  document.getElementById('modal').style.display = 'none';
+}
+
+// ── DOCS ─────────────────────────────────────────────────────────────────
+function renderDocs(){
+  document.getElementById('doc-grid').innerHTML = DOCS_DATA.map(d=>`
+    <div class="doc-card">
+      <div class="doc-icon" style="background:${d.color}18">${d.icon}</div>
+      <div class="doc-title">${d.title}</div>
+      <div class="doc-desc">${d.desc}</div>
+      <div class="doc-tags">${d.tags.map(t=>`<span class="tag tag-gray">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+updateCountdown();
+setInterval(updateCountdown, 60000);
+renderDashboard();
+</script>
+</body>
+</html>
